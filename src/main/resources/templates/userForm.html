@@ -1,0 +1,42 @@
+<!-- userForm.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>User Form</title>
+</head>
+<body>
+<h2>User Form</h2>
+
+<form th:action="@{/submit}" th:object="${user}" method="post">
+    <div>
+        <label for="username">Username:</label>
+        <input type="text" id="username" th:field="*{username}" />
+        <div th:if="${#fields.hasErrors('username')}" th:errors="*{username}">Username Error</div>
+    </div>
+    <div>
+        <label for="age">Age:</label>
+        <input type="number" id="age" th:field="*{age}" />
+        <div th:if="${#fields.hasErrors('age')}" th:errors="*{age}">Age Error</div>
+    </div>
+    <div>
+        <label>Hobbies:</label><br />
+        <div th:each="hobby, iterStat : ${hobbies}">
+            <input type="checkbox" th:field="*{hobbies[__${iterStat.index}__].selected}" />
+            <input type="hidden" th:field="*{hobbies[__${iterStat.index}__].name}" />
+            <span th:text="${hobby.name}"></span>
+        </div>
+    </div>
+
+    <br /><br />
+
+    <div>
+        <label>Hobby Names:</label><br />
+        <div th:each="hobby : ${hobbies}">
+            <input type="checkbox" name="hobbyNames" th:value="${hobby.name}" th:checked="${#lists.contains(user.hobbyNames, hobby.name)}" />
+            <span th:text="${hobby.name}"></span>
+        </div>
+    </div>
+    <button type="submit">Submit</button>
+</form>
+</body>
+</html>
